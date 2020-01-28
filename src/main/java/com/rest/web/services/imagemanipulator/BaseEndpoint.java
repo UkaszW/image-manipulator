@@ -1,5 +1,6 @@
 package com.rest.web.services.imagemanipulator;
 
+import com.rest.web.services.imagemanipulator.exception.ImageNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -22,8 +23,13 @@ public class BaseEndpoint {
         return imageRepository.save(image);
     }
 
-    @PostMapping("/download")
-    public Image downloadImage(@RequestParam("id") Long id) {
+    @GetMapping("image/{id}")
+    public Image getImageById(@PathVariable Long id) {
         return imageRepository.findById(id).orElse(null);
+    }
+
+    @DeleteMapping("image/{id}")
+    public void deleteImageById(@PathVariable Long id) {
+        imageRepository.findById(id).ifPresent(imageRepository::delete);
     }
 }
